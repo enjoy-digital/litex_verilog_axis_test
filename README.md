@@ -21,7 +21,7 @@ This repository is an experiment to wrap Alex Forenchich's Verilog-AXI-Stream co
 | axis_frame_join               | TODO                                                             |
 | axis_frame_length_adjust      | TODO                                                             |
 | axis_frame_length_adjust_fifo | TODO                                                             |
-| axis_mux                      | TODO                                                             |
+| axis_mux                      | Done, passing simple tests                                       |
 | axis_pipeline_fifo            | Useless, will be composed with LiteX and axis_fifo               |
 | axis_pipeline_register        | Useless, will be composed with LiteX and axis_register           |
 | axis_ram_switch               | TODO                                                             |
