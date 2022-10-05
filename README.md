@@ -16,7 +16,7 @@ This repository is an experiment to wrap Alex Forenchich's Verilog-AXI-Stream co
 | axis_cobs_encode              | TODO                       |
 | axis_crosspoint               | TODO                       |
 | axis_demux                    | TODO                       |
-| axis_fifo                     | TODO                       |
+| axis_fifo                     | Done, passing simple tests |
 | axis_fifo_adapter             | TODO                       |
 | axis_frame_join               | TODO                       |
 | axis_frame_length_adjust      | TODO                       |
@@ -26,7 +26,7 @@ This repository is an experiment to wrap Alex Forenchich's Verilog-AXI-Stream co
 | axis_pipeline_register        | TODO                       |
 | axis_ram_switch               | TODO                       |
 | axis_rate_limit               | TODO                       |
-| axis_register                 | TODO                       |
+| axis_register                 | Done, passing simple tests |
 | axis_srl_fifo                 | TODO                       |
 | axis_srl_register             | TODO                       |
 | axis_stat_counter             | TODO                       |
