@@ -9,7 +9,7 @@ This repository is an experiment to wrap Alex Forenchich's Verilog-AXI-Stream co
 |-------------------------------|--------------------------------------------------------|
 | axis_adapter                  | TODO                                                   |
 | axis_arb_mux                  | TODO                                                   |
-| axis_async_fifo               | TODO                                                   |
+| axis_async_fifo               | Done, passing simple tests                             |
 | axis_async_fifo_adapter       | TODO                                                   |
 | axis_broadcast                | TODO                                                   |
 | axis_cobs_decode              | TODO                                                   |
