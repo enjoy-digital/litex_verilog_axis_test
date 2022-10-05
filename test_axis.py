@@ -65,11 +65,13 @@ class AXISGenerator(Module):
 class AXISChecker(Module):
     def __init__(self, axis):
         self.errors = Signal(32)
+        self.cycles = Signal(32)
 
         axis_data_last = Signal(len(axis.data), reset=(2**len(axis.data)-1))
         self.comb += axis.ready.eq(1)
         self.sync += [
             If(axis.valid & axis.ready,
+                self.cycles.eq(self.cycles + 1),
                 If(axis.data != (axis_data_last + 1),
                     self.errors.eq(self.errors + 1)
                 ),
@@ -109,6 +111,13 @@ class AXISSimSoC(SoCCore):
             s_axis = AXIStreamInterface(data_width=32)
             m_axis = AXIStreamInterface(data_width=32)
             self.submodules.axis_srl_fifo = AXISSRLFIFO(platform, s_axis, m_axis, depth=16)
+
+            # AXIS Async FIFO.
+            # ----------------
+            from verilog_axis.axis_async_fifo import AXISAsyncFIFO
+            s_axis = AXIStreamInterface(data_width=32)
+            m_axis = AXIStreamInterface(data_width=32)
+            self.submodules.axis_async_fifo = AXISAsyncFIFO(platform, s_axis, m_axis, depth=4096)
 
             # AXIS Regiser.
             # -------------
@@ -154,6 +163,17 @@ class AXISSimSoC(SoCCore):
             axis_srl_fifo_checker   = AXISChecker(m_axis)
             self.submodules += axis_srl_fifo_generator, axis_srl_fifo_checker
 
+            # AXIS Async FIFO.
+            # ----------------
+            from verilog_axis.axis_async_fifo import AXISAsyncFIFO
+            s_axis = AXIStreamInterface(data_width=32)
+            m_axis = AXIStreamInterface(data_width=32)
+            self.submodules.axis_async_fifo = AXISAsyncFIFO(platform, s_axis, m_axis, depth=4096)
+
+            axis_async_fifo_generator = AXISGenerator(s_axis)
+            axis_async_fifo_checker   = AXISChecker(m_axis)
+            self.submodules += axis_async_fifo_generator, axis_async_fifo_checker
+
             # AXIS Register.
             # --------------
             from verilog_axis.axis_register import AXISRegister
@@ -176,7 +196,6 @@ class AXISSimSoC(SoCCore):
             axis_srl_register_checker   = AXISChecker(m_axis)
             self.submodules += axis_srl_register_generator, axis_srl_register_checker
 
-
             # AXIS Rate Limit.
             # ----------------
             from verilog_axis.axis_rate_limit import AXISRateLimit
@@ -194,11 +213,24 @@ class AXISSimSoC(SoCCore):
             self.sync += If(cycles == 10000,
                 Display("-"*80),
                 Display("Cycles                   : %d", cycles),
-                Display("AXIS FIFO         Errors : %d", axis_fifo_checker.errors),
-                Display("AXIS SRL FIFO     Errors : %d", axis_srl_fifo_checker.errors),
-                Display("AXIS Register     Errors : %d", axis_register_checker.errors),
-                Display("AXIS SRL Register Errors : %d", axis_srl_register_checker.errors),
-                Display("AXIS Rate Limit   Errors : %d", axis_rate_limit_checker.errors),
+                Display("AXIS FIFO         Errors : %d / Cycles: %d",
+                    axis_fifo_checker.errors,
+                    axis_fifo_checker.cycles),
+                Display("AXIS SRL FIFO     Errors : %d / Cycles: %d",
+                    axis_srl_fifo_checker.errors,
+                    axis_srl_fifo_checker.cycles),
+                Display("AXIS Async FIFO   Errors : %d / Cycles: %d",
+                    axis_async_fifo_checker.errors,
+                    axis_async_fifo_checker.cycles),
+                Display("AXIS Register     Errors : %d / Cycles: %d",
+                    axis_register_checker.errors,
+                    axis_register_checker.cycles),
+                Display("AXIS SRL Register Errors : %d / Cycles: %d",
+                    axis_srl_register_checker.errors,
+                    axis_srl_register_checker.cycles),
+                Display("AXIS Rate Limit   Errors : %d / Cycles: %d",
+                    axis_rate_limit_checker.errors,
+                    axis_rate_limit_checker.cycles),
                 Finish(),
             )
 
