@@ -124,6 +124,13 @@ class AXISSimSoC(SoCCore):
             m_axis = AXIStreamInterface(data_width=32)
             self.submodules.axis_srl_register = AXISSRLRegister(platform, s_axis, m_axis)
 
+            # AXIS Rate Limit.
+            # ----------------
+            from verilog_axis.axis_rate_limit import AXISRateLimit
+            s_axis = AXIStreamInterface(data_width=32)
+            m_axis = AXIStreamInterface(data_width=32)
+            self.submodules.axis_rate_limit = AXISRateLimit(platform, s_axis, m_axis)
+
         def axis_integration_test():
             # AXIS FIFO.
             # ----------
@@ -169,6 +176,18 @@ class AXISSimSoC(SoCCore):
             axis_srl_register_checker   = AXISChecker(m_axis)
             self.submodules += axis_srl_register_generator, axis_srl_register_checker
 
+
+            # AXIS Rate Limit.
+            # ----------------
+            from verilog_axis.axis_rate_limit import AXISRateLimit
+            s_axis = AXIStreamInterface(data_width=32)
+            m_axis = AXIStreamInterface(data_width=32)
+            self.submodules.axis_rate_limit = AXISRateLimit(platform, s_axis, m_axis)
+
+            axis_rate_limit_generator = AXISGenerator(s_axis)
+            axis_rate_limit_checker   = AXISChecker(m_axis)
+            self.submodules += axis_rate_limit_generator, axis_rate_limit_checker
+
             # Finish -------------------------------------------------------------------------------
             cycles = Signal(32)
             self.sync += cycles.eq(cycles + 1)
@@ -178,7 +197,8 @@ class AXISSimSoC(SoCCore):
                 Display("AXIS FIFO         Errors : %d", axis_fifo_checker.errors),
                 Display("AXIS SRL FIFO     Errors : %d", axis_srl_fifo_checker.errors),
                 Display("AXIS Register     Errors : %d", axis_register_checker.errors),
-                Display("AXIS SRL Register Errors : %d", axis_register_checker.errors),
+                Display("AXIS SRL Register Errors : %d", axis_srl_register_checker.errors),
+                Display("AXIS Rate Limit   Errors : %d", axis_rate_limit_checker.errors),
                 Finish(),
             )
 
