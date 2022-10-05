@@ -31,6 +31,19 @@ class AXISFIFO(Module):
         # Get/Check Parameters.
         # ---------------------
 
+        # Clock Domain.
+        clock_domain = s_axis.clock_domain
+        if s_axis.clock_domain != m_axis.clock_domain:
+            self.logger.error("{} on {} (Slave: {} / Master: {}), should be {}.".format(
+                colorer("Different Clock Domain", color="red"),
+                colorer("AXI-Stream interfaces."),
+                colorer(s_axis.clock_domain),
+                colorer(m_axis.clock_domain),
+                colorer("the same")))
+            raise AXIError()
+        else:
+            self.logger.info(f"Clock Domain: {colorer(clock_domain)}")
+
         # Data width.
         data_width = len(s_axis.data)
         self.logger.info(f"Data Width: {colorer(data_width)}")
@@ -72,8 +85,8 @@ class AXISFIFO(Module):
 
             # Clk / Rst.
             # ----------
-            i_clk = ClockSignal("sys"), # FIXME. clock_domain.
-            i_rst = ResetSignal("sys"), # FIXME: clock_domain.
+            i_clk = ClockSignal(clock_domain),
+            i_rst = ResetSignal(clock_domain),
 
             # Status.
             # -------
