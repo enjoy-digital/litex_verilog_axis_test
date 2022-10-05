@@ -155,6 +155,14 @@ class AXISSimSoC(SoCCore):
             m_axis1 = AXIStreamInterface(data_width=32)
             self.submodules.axis_broadcast = AXISBroadcast(platform, s_axis, [m_axis0, m_axis1])
 
+            # AXIS Arb Mux.
+            # -------------
+            from verilog_axis.axis_arb_mux import AXISArbMux
+            s_axis0 = AXIStreamInterface(data_width=32)
+            s_axis1 = AXIStreamInterface(data_width=32)
+            m_axis  = AXIStreamInterface(data_width=32)
+            self.submodules.axis_broadcast = AXISArbMux(platform, [m_axis0, m_axis1], m_axis)
+
         def axis_integration_test():
             # AXIS FIFO.
             # ----------
@@ -246,6 +254,17 @@ class AXISSimSoC(SoCCore):
             axis_broadcast_checker1  = AXISChecker(m_axis1)
             self.submodules += axis_broadcast_generator, axis_broadcast_checker0, axis_broadcast_checker1
 
+            # AXIS Arb Mux.
+            # -------------
+            from verilog_axis.axis_arb_mux import AXISArbMux
+            s_axis0 = AXIStreamInterface(data_width=32)
+            s_axis1 = AXIStreamInterface(data_width=32)
+            m_axis  = AXIStreamInterface(data_width=32)
+            self.submodules.axis_broadcast = AXISArbMux(platform, [m_axis0, m_axis1], m_axis)
+
+            axis_arb_mux_generator = AXISGenerator(s_axis0)
+            axis_arb_mux_checker   = AXISChecker(m_axis)
+            self.submodules += axis_arb_mux_generator, axis_arb_mux_checker
 
             # Finish -------------------------------------------------------------------------------
             cycles = Signal(32)
@@ -280,6 +299,9 @@ class AXISSimSoC(SoCCore):
                 Display("AXIS Broadcast 1  Errors : %d / Cycles: %d",
                     axis_broadcast_checker1.errors,
                     axis_broadcast_checker1.cycles),
+               Display("AXIS Arb Mux       Errors : %d / Cycles: %d",
+                    axis_arb_mux_checker.errors,
+                    axis_arb_mux_checker.cycles),
                 Finish(),
             )
 
