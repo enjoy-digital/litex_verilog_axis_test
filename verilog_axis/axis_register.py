@@ -74,7 +74,7 @@ class AXISRegister(Module):
             p_DEST_WIDTH  = max(1, dest_width),
             p_USER_ENABLE = user_width > 0,
             p_USER_WIDTH  = max(1, user_width),
-            p_REG_TYPE    = 2, # FIXME: Epose.
+            p_REG_TYPE    = 2, # FIXME: Expose.
 
             # Clk / Rst.
             # ----------

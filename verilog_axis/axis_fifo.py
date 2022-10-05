@@ -75,13 +75,13 @@ class AXISFIFO(Module):
             p_DEST_WIDTH           = max(1, dest_width),
             p_USER_ENABLE          = user_width > 0,
             p_USER_WIDTH           = max(1, user_width),
-            p_PIPELINE_OUTPUT      = 2, # FIXME: Epose.
-            p_FRAME_FIFO           = 0, # FIXME: Epose.
-            p_USER_BAD_FRAME_VALUE = 1, # FIXME: Epose.
-            p_USER_BAD_FRAME_MASK  = 1, # FIXME: Epose.
-            p_DROP_OVERSIZE_FRAME  = 0, # FIXME: Epose.
-            p_DROP_BAD_FRAME       = 0, # FIXME: Epose.
-            p_DROP_WHEN_FULL       = 0, # FIXME: Epose.
+            p_PIPELINE_OUTPUT      = 2, # FIXME: Expose.
+            p_FRAME_FIFO           = 0, # FIXME: Expose.
+            p_USER_BAD_FRAME_VALUE = 1, # FIXME: Expose.
+            p_USER_BAD_FRAME_MASK  = 1, # FIXME: Expose.
+            p_DROP_OVERSIZE_FRAME  = 0, # FIXME: Expose.
+            p_DROP_BAD_FRAME       = 0, # FIXME: Expose.
+            p_DROP_WHEN_FULL       = 0, # FIXME: Expose.
 
             # Clk / Rst.
             # ----------

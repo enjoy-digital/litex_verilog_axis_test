@@ -67,8 +67,8 @@ class AXISTap(Module):
             p_DEST_WIDTH           = max(1, dest_width),
             p_USER_ENABLE          = user_width > 0,
             p_USER_WIDTH           = max(1, user_width),
-            p_USER_BAD_FRAME_VALUE = 1, # FIXME: Epose.
-            p_USER_BAD_FRAME_MASK  = 1, # FIXME: Epose.
+            p_USER_BAD_FRAME_VALUE = 1, # FIXME: Expose.
+            p_USER_BAD_FRAME_MASK  = 1, # FIXME: Expose.
 
             # Clk / Rst.
             # ----------
