@@ -140,6 +140,13 @@ class AXISSimSoC(SoCCore):
             m_axis = AXIStreamInterface(data_width=32)
             self.submodules.axis_rate_limit = AXISRateLimit(platform, s_axis, m_axis)
 
+            # AXIS Tap.
+            # ---------
+            from verilog_axis.axis_tap import AXISTap
+            s_axis = AXIStreamInterface(data_width=32)
+            m_axis = AXIStreamInterface(data_width=32)
+            self.submodules.axis_tap = AXISTap(platform, s_axis, m_axis)
+
         def axis_integration_test():
             # AXIS FIFO.
             # ----------
@@ -207,6 +214,17 @@ class AXISSimSoC(SoCCore):
             axis_rate_limit_checker   = AXISChecker(m_axis)
             self.submodules += axis_rate_limit_generator, axis_rate_limit_checker
 
+            # AXIS Tap.
+            # ---------
+            from verilog_axis.axis_tap import AXISTap
+            s_axis = AXIStreamInterface(data_width=32)
+            m_axis = AXIStreamInterface(data_width=32)
+            self.submodules.axis_tap = AXISTap(platform, s_axis, m_axis)
+
+            axis_tap_generator = AXISGenerator(s_axis)
+            axis_tap_checker   = AXISChecker(m_axis)
+            self.submodules += axis_tap_generator, axis_tap_checker
+
             # Finish -------------------------------------------------------------------------------
             cycles = Signal(32)
             self.sync += cycles.eq(cycles + 1)
@@ -231,6 +249,9 @@ class AXISSimSoC(SoCCore):
                 Display("AXIS Rate Limit   Errors : %d / Cycles: %d",
                     axis_rate_limit_checker.errors,
                     axis_rate_limit_checker.cycles),
+                Display("AXIS Tap          Errors : %d / Cycles: %d",
+                    axis_tap_checker.errors,
+                    axis_tap_checker.cycles),
                 Finish(),
             )
 
