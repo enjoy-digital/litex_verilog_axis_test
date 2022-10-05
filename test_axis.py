@@ -147,6 +147,14 @@ class AXISSimSoC(SoCCore):
             m_axis = AXIStreamInterface(data_width=32)
             self.submodules.axis_tap = AXISTap(platform, s_axis, m_axis)
 
+            # AXIS Broadcast.
+            # ---------------
+            from verilog_axis.axis_broadcast import AXISBroadcast
+            s_axis  = AXIStreamInterface(data_width=32)
+            m_axis0 = AXIStreamInterface(data_width=32)
+            m_axis1 = AXIStreamInterface(data_width=32)
+            self.submodules.axis_broadcast = AXISBroadcast(platform, s_axis, [m_axis0, m_axis1])
+
         def axis_integration_test():
             # AXIS FIFO.
             # ----------
@@ -225,6 +233,20 @@ class AXISSimSoC(SoCCore):
             axis_tap_checker   = AXISChecker(m_axis)
             self.submodules += axis_tap_generator, axis_tap_checker
 
+            # AXIS Broadcast.
+            # ---------------
+            from verilog_axis.axis_broadcast import AXISBroadcast
+            s_axis = AXIStreamInterface(data_width=32)
+            m_axis0 = AXIStreamInterface(data_width=32)
+            m_axis1 = AXIStreamInterface(data_width=32)
+            self.submodules.axis_broadcast = AXISBroadcast(platform, s_axis, [m_axis0, m_axis1])
+
+            axis_broadcast_generator = AXISGenerator(s_axis)
+            axis_broadcast_checker0  = AXISChecker(m_axis0)
+            axis_broadcast_checker1  = AXISChecker(m_axis1)
+            self.submodules += axis_broadcast_generator, axis_broadcast_checker0, axis_broadcast_checker1
+
+
             # Finish -------------------------------------------------------------------------------
             cycles = Signal(32)
             self.sync += cycles.eq(cycles + 1)
@@ -252,6 +274,12 @@ class AXISSimSoC(SoCCore):
                 Display("AXIS Tap          Errors : %d / Cycles: %d",
                     axis_tap_checker.errors,
                     axis_tap_checker.cycles),
+                Display("AXIS Broadcast 0  Errors : %d / Cycles: %d",
+                    axis_broadcast_checker0.errors,
+                    axis_broadcast_checker0.cycles),
+                Display("AXIS Broadcast 1  Errors : %d / Cycles: %d",
+                    axis_broadcast_checker1.errors,
+                    axis_broadcast_checker1.cycles),
                 Finish(),
             )
 
