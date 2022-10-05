@@ -28,7 +28,7 @@ This repository is an experiment to wrap Alex Forenchich's Verilog-AXI-Stream co
 | axis_rate_limit               | TODO                                                   |
 | axis_register                 | Done, passing simple tests                             |
 | axis_srl_fifo                 | Done, passing simple tests                             |
-| axis_srl_register             | TODO                                                   |
+| axis_srl_register             | Done, passing simple tests                             |
 | axis_stat_counter             | TODO                                                   |
 | axis_switch                   | TODO                                                   |
 | axis_tap                      | TODO                                                   |
