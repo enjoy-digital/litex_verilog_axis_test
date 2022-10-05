@@ -103,6 +103,13 @@ class AXISSimSoC(SoCCore):
             m_axis = AXIStreamInterface(data_width=32)
             self.submodules.axis_fifo = AXISFIFO(platform, s_axis, m_axis, depth=4096)
 
+            # AXIS Regiser.
+            # -------------
+            from verilog_axis.axis_register import AXISRegister
+            s_axis = AXIStreamInterface(data_width=32)
+            m_axis = AXIStreamInterface(data_width=32)
+            self.submodules.axis_register = AXISRegister(platform, s_axis, m_axis)
+
         def axis_integration_test():
             # AXIS FIFO.
             # ----------
@@ -115,13 +122,25 @@ class AXISSimSoC(SoCCore):
             axis_fifo_checker  = AXISChecker(m_axis)
             self.submodules += axis_fifo_generator, axis_fifo_checker
 
+            # AXIS Register.
+            # --------------
+            from verilog_axis.axis_register import AXISRegister
+            s_axis = AXIStreamInterface(data_width=32)
+            m_axis = AXIStreamInterface(data_width=32)
+            self.submodules.axis_register = AXISRegister(platform, s_axis, m_axis)
+
+            axis_register_generator = AXISGenerator(s_axis)
+            axis_register_checker  = AXISChecker(m_axis)
+            self.submodules += axis_register_generator, axis_register_checker
+
             # Finish -------------------------------------------------------------------------------
             cycles = Signal(32)
             self.sync += cycles.eq(cycles + 1)
             self.sync += If(cycles == 10000,
                 Display("-"*80),
-                Display("Cycles          : %d", cycles),
-                Display("AXIS FIFO Errors: %d", axis_fifo_checker.errors),
+                Display("Cycles               : %d", cycles),
+                Display("AXIS FIFO     Errors : %d", axis_fifo_checker.errors),
+                Display("AXIS Register Errors : %d", axis_register_checker.errors),
                 Finish(),
             )
 
