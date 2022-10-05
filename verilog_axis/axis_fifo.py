@@ -22,6 +22,12 @@ class AXISFIFO(Module):
     def __init__(self, platform, s_axis, m_axis, depth=4096):
         self.logger = logging.getLogger("AXISFIFO")
 
+        # Status.
+        # -------
+        self.overflow   = Signal()
+        self.bad_frame  = Signal()
+        self.good_frame = Signal()
+
         # Get/Check Parameters.
         # ---------------------
 
@@ -71,9 +77,9 @@ class AXISFIFO(Module):
 
             # Status.
             # -------
-            o_status_overflow   = Open(), # FIXME: Expose.
-            o_status_bad_frame  = Open(), # FIXME: Expose.
-            o_status_good_frame = Open(), # FIXME: Expose.
+            o_status_overflow   = self.overflow,
+            o_status_bad_frame  = self.bad_frame,
+            o_status_good_frame = self.good_frame,
 
             # AXI Input.
             # ----------
