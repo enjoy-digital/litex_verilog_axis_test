@@ -161,7 +161,15 @@ class AXISSimSoC(SoCCore):
             s_axis0 = AXIStreamInterface(data_width=32)
             s_axis1 = AXIStreamInterface(data_width=32)
             m_axis  = AXIStreamInterface(data_width=32)
-            self.submodules.axis_broadcast = AXISArbMux(platform, [m_axis0, m_axis1], m_axis)
+            self.submodules.axis_arb_mux = AXISArbMux(platform, [m_axis0, m_axis1], m_axis)
+
+            # AXIS Mux.
+            # ---------
+            from verilog_axis.axis_mux import AXISMux
+            s_axis0 = AXIStreamInterface(data_width=32)
+            s_axis1 = AXIStreamInterface(data_width=32)
+            m_axis  = AXIStreamInterface(data_width=32)
+            self.submodules.axis_mux = AXISMux(platform, [m_axis0, m_axis1], m_axis)
 
         def axis_integration_test():
             # AXIS FIFO.
@@ -257,6 +265,18 @@ class AXISSimSoC(SoCCore):
             # AXIS Arb Mux.
             # -------------
             from verilog_axis.axis_arb_mux import AXISArbMux
+            s_axis0 = AXIStreamInterface(data_width=32)
+            s_axis1 = AXIStreamInterface(data_width=32)
+            m_axis  = AXIStreamInterface(data_width=32)
+            self.submodules.axis_broadcast = AXISArbMux(platform, [m_axis0, m_axis1], m_axis)
+
+            axis_arb_mux_generator = AXISGenerator(s_axis0)
+            axis_arb_mux_checker   = AXISChecker(m_axis)
+            self.submodules += axis_arb_mux_generator, axis_arb_mux_checker
+
+            # AXIS Mux.
+            # ---------
+            from verilog_axis.axis_mux import AXISMux
             s_axis0 = AXIStreamInterface(data_width=32)
             s_axis1 = AXIStreamInterface(data_width=32)
             m_axis  = AXIStreamInterface(data_width=32)
