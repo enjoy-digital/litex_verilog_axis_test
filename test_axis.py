@@ -49,6 +49,34 @@ class Platform(SimPlatform):
     def __init__(self):
         SimPlatform.__init__(self, "SIM", _io)
 
+# AXIS Generator -----------------------------------------------------------------------------------
+
+# FIXME: Minimal Generator, Improve.
+
+class AXISGenerator(Module):
+    def __init__(self, axis):
+        self.comb += axis.valid.eq(1)
+        self.sync += If(axis.valid & axis.ready, axis.data.eq(axis.data + 1))
+
+# AXIS Checker -------------------------------------------------------------------------------------
+
+# FIXME: Minimal Checker, Improve.
+
+class AXISChecker(Module):
+    def __init__(self, axis):
+        self.errors = Signal(32)
+
+        axis_data_last = Signal(len(axis.data), reset=(2**len(axis.data)-1))
+        self.comb += axis.ready.eq(1)
+        self.sync += [
+            If(axis.valid & axis.ready,
+                If(axis.data != (axis_data_last + 1),
+                    self.errors.eq(self.errors + 1)
+                ),
+                axis_data_last.eq(axis.data)
+            )
+        ]
+
 # AXISSimSoC ---------------------------------------------------------------------------------------
 
 class AXISSimSoC(SoCCore):
@@ -64,8 +92,7 @@ class AXISSimSoC(SoCCore):
         self.submodules.crg = CRG(platform.request("sys_clk"))
 
         # SoCCore ----------------------------------------------------------------------------------
-        SoCCore.__init__(self, platform, clk_freq=sys_clk_freq, bus_standard="axi-lite", uart_name="sim", integrated_rom_size=0x10000)
-        self.add_config("BIOS_NO_BOOT")
+        SoCMini.__init__(self, platform, clk_freq=sys_clk_freq)
 
         # AXIS Tests --------------------------------------------------------------------------------
         def axis_syntax_test():
@@ -77,7 +104,26 @@ class AXISSimSoC(SoCCore):
             self.submodules.axis_fifo = AXISFIFO(platform, s_axis, m_axis, depth=4096)
 
         def axis_integration_test():
-            pass
+            # AXIS FIFO.
+            # ----------
+            from verilog_axis.axis_fifo import AXISFIFO
+            s_axis = AXIStreamInterface(data_width=32)
+            m_axis = AXIStreamInterface(data_width=32)
+            self.submodules.axis_fifo = AXISFIFO(platform, s_axis, m_axis, depth=4096)
+
+            axis_fifo_generator = AXISGenerator(s_axis)
+            axis_fifo_checker  = AXISChecker(m_axis)
+            self.submodules += axis_fifo_generator, axis_fifo_checker
+
+            # Finish -------------------------------------------------------------------------------
+            cycles = Signal(32)
+            self.sync += cycles.eq(cycles + 1)
+            self.sync += If(cycles == 10000,
+                Display("-"*80),
+                Display("Cycles          : %d", cycles),
+                Display("AXIS FIFO Errors: %d", axis_fifo_checker.errors),
+                Finish(),
+            )
 
         axis_syntax_test()
         axis_integration_test()
@@ -90,7 +136,6 @@ def main():
     args = parser.parse_args()
     verilator_build_kwargs = verilator_build_argdict(args)
     sim_config = SimConfig(default_clk="sys_clk")
-    sim_config.add_module("serial2console", "serial")
 
     soc = AXISSimSoC()
     builder = Builder(soc)
