@@ -19,7 +19,7 @@ from verilog_axis.axis_common import *
 # AXIS Register ------------------------------------------------------------------------------------
 
 class AXISRegister(Module):
-    def __init__(self, platform, s_axis, m_axis):
+    def __init__(self, platform, s_axis, m_axis, last_enable=1, reg_type=2): # FIXME: Add constants.
         self.logger = logging.getLogger("AXISRegister")
 
         # Status.
@@ -67,14 +67,14 @@ class AXISRegister(Module):
             # Parameters.
             # -----------
             p_DATA_WIDTH  = data_width,
-            p_LAST_ENABLE = 1, # FIXME: Expose.
+            p_LAST_ENABLE = last_enable,
             p_ID_ENABLE   = id_width > 0,
             p_ID_WIDTH    = max(1, id_width),
             p_DEST_ENABLE = dest_width > 0,
             p_DEST_WIDTH  = max(1, dest_width),
             p_USER_ENABLE = user_width > 0,
             p_USER_WIDTH  = max(1, user_width),
-            p_REG_TYPE    = 2, # FIXME: Expose.
+            p_REG_TYPE    = reg_type,
 
             # Clk / Rst.
             # ----------

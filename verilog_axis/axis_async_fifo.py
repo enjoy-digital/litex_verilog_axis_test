@@ -19,7 +19,15 @@ from verilog_axis.axis_common import *
 # AXIS Async FIFO ----------------------------------------------------------------------------------
 
 class AXISAsyncFIFO(Module):
-    def __init__(self, platform, s_axis, m_axis, depth=4096):
+    def __init__(self, platform, s_axis, m_axis, depth=4096,
+        last_enable          = 1,
+        pipeline_output      = 2, # FIXME: Add constants.
+        frame_fifo           = 0,
+        user_bad_frame_value = 1,
+        user_bad_frame_mask  = 1,
+        drop_bad_frame       = 0,
+        drop_when_full       = 0,
+    ):
         self.logger = logging.getLogger("AXISAsyncFIFO")
 
         # Status.
@@ -64,19 +72,19 @@ class AXISAsyncFIFO(Module):
             # -----------
             p_DEPTH                = depth,
             p_DATA_WIDTH           = data_width,
-            p_LAST_ENABLE          = 1, # FIXME: Expose.
+            p_LAST_ENABLE          = last_enable,
             p_ID_ENABLE            = id_width > 0,
             p_ID_WIDTH             = max(1, id_width),
             p_DEST_ENABLE          = dest_width > 0,
             p_DEST_WIDTH           = max(1, dest_width),
             p_USER_ENABLE          = user_width > 0,
             p_USER_WIDTH           = max(1, user_width),
-            p_PIPELINE_OUTPUT      = 2, # FIXME: Expose.
-            p_FRAME_FIFO           = 0, # FIXME: Expose.
-            p_USER_BAD_FRAME_VALUE = 1, # FIXME: Expose.
-            p_USER_BAD_FRAME_MASK  = 1, # FIXME: Expose.
-            p_DROP_BAD_FRAME       = 0, # FIXME: Expose.
-            p_DROP_WHEN_FULL       = 0, # FIXME: Expose.
+            p_PIPELINE_OUTPUT      = pipeline_output,
+            p_FRAME_FIFO           = frame_fifo,
+            p_USER_BAD_FRAME_VALUE = user_bad_frame_value,
+            p_USER_BAD_FRAME_MASK  = user_bad_frame_mask,
+            p_DROP_BAD_FRAME       = drop_bad_frame,
+            p_DROP_WHEN_FULL       = drop_when_full,
 
             # Status.
             # -------

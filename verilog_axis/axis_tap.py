@@ -19,7 +19,10 @@ from verilog_axis.axis_common import *
 # AXIS Tap -----------------------------------------------------------------------------------------
 
 class AXISTap(Module):
-    def __init__(self, platform, tap_axis, m_axis):
+    def __init__(self, platform, tap_axis, m_axis,
+        user_bad_frame_value = 1,
+        user_bad_frame_mask  = 1,
+    ):
         self.logger = logging.getLogger("AXISTap")
 
         # Get/Check Parameters.
@@ -67,8 +70,8 @@ class AXISTap(Module):
             p_DEST_WIDTH           = max(1, dest_width),
             p_USER_ENABLE          = user_width > 0,
             p_USER_WIDTH           = max(1, user_width),
-            p_USER_BAD_FRAME_VALUE = 1, # FIXME: Expose.
-            p_USER_BAD_FRAME_MASK  = 1, # FIXME: Expose.
+            p_USER_BAD_FRAME_VALUE = user_bad_frame_value,
+            p_USER_BAD_FRAME_MASK  = user_bad_frame_mask,
 
             # Clk / Rst.
             # ----------

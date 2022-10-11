@@ -19,7 +19,7 @@ from verilog_axis.axis_common import *
 # AXIS Broadcast -----------------------------------------------------------------------------------
 
 class AXISBroadcast(Module):
-    def __init__(self, platform, s_axis, m_axis):
+    def __init__(self, platform, s_axis, m_axis, last_enable=1):
         self.logger = logging.getLogger("AXIBroadcast")
 
         # FIXME: Add Logs/Checks.
@@ -60,7 +60,7 @@ class AXISBroadcast(Module):
             # -----------
             p_M_COUNT     = len(m_axis),
             p_DATA_WIDTH  = data_width,
-            p_LAST_ENABLE = 1, # FIXME: Expose.
+            p_LAST_ENABLE = last_enable,
             p_ID_ENABLE   = id_width > 0,
             p_ID_WIDTH    = max(1, id_width),
             p_DEST_ENABLE = dest_width > 0,

@@ -19,7 +19,7 @@ from verilog_axis.axis_common import *
 # AXIS SRL FIFO ------------------------------------------------------------------------------------
 
 class AXISSRLFIFO(Module):
-    def __init__(self, platform, s_axis, m_axis, depth=16):
+    def __init__(self, platform, s_axis, m_axis, depth=16, last_enable=1):
         assert depth <= 16
         self.logger = logging.getLogger("AXISSRLFIFO")
 
@@ -67,7 +67,7 @@ class AXISSRLFIFO(Module):
             # -----------
             p_DEPTH       = depth,
             p_DATA_WIDTH  = data_width,
-            p_LAST_ENABLE = 1, # FIXME: Expose.
+            p_LAST_ENABLE = last_enable,
             p_ID_ENABLE   = id_width > 0,
             p_ID_WIDTH    = max(1, id_width),
             p_DEST_ENABLE = dest_width > 0,

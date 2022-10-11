@@ -19,7 +19,12 @@ from verilog_axis.axis_common import *
 # AXIS Arb Mux -------------------------------------------------------------------------------------
 
 class AXISArbMux(Module):
-    def __init__(self, platform, s_axis, m_axis):
+    def __init__(self, platform, s_axis, m_axis,
+        last_enable           = 1,
+        update_tid            = 0,
+        arb_type_round_robin  = 0,
+        arb_lsb_high_priority = 1,
+    ):
         self.logger = logging.getLogger("AXISARBMux")
 
         # FIXME: Add Logs/Checks.
@@ -66,10 +71,10 @@ class AXISArbMux(Module):
             p_DEST_WIDTH            = max(1, dest_width),
             p_USER_ENABLE           = user_width > 0,
             p_USER_WIDTH            = max(1, user_width),
-            p_LAST_ENABLE           = 1, # FIXME: Expose.
-            p_UPDATE_TID            = 0, # FIXME: Expose.
-            p_ARB_TYPE_ROUND_ROBIN  = 0, # FIXME: Expose.
-            p_ARB_LSB_HIGH_PRIORITY = 1, # FIXME: Expose.
+            p_LAST_ENABLE           = last_enable,
+            p_UPDATE_TID            = update_tid,
+            p_ARB_TYPE_ROUND_ROBIN  = arb_type_round_robin,
+            p_ARB_LSB_HIGH_PRIORITY = arb_lsb_high_priority,
 
             # Clk / Rst.
             # ----------
