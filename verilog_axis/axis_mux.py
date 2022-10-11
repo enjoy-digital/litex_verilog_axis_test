@@ -45,15 +45,15 @@ class AXISMux(Module):
         self.logger.info(f"Data Width: {colorer(data_width)}")
 
         # ID width.
-        id_width = len(s_axis[0].id)
+        id_width = s_axis[0].id_width
         self.logger.info(f"ID Width: {colorer(id_width)}")
 
         # Dest width.
-        dest_width = len(s_axis[0].id)
+        dest_width = s_axis[0].data_width
         self.logger.info(f"Dest Width: {colorer(dest_width)}")
 
         # User width.
-        user_width = len(s_axis[0].user)
+        user_width = s_axis[0].user_width
         self.logger.info(f"User Width: {colorer(user_width)}")
 
         # Module instance.
@@ -64,12 +64,12 @@ class AXISMux(Module):
             # -----------
             p_S_COUNT     = len(s_axis),
             p_DATA_WIDTH  = data_width,
-            p_ID_ENABLE   = 0, # FIXME: Expose.
-            p_ID_WIDTH    = id_width,
-            p_DEST_ENABLE = 0, # FIXME: Expose.
-            p_DEST_WIDTH  = dest_width,
-            p_USER_ENABLE = 0, # FIXME: Expose.
-            p_USER_WIDTH  = user_width,
+            p_ID_ENABLE   = id_width > 0,
+            p_ID_WIDTH    = max(1, id_width),
+            p_DEST_ENABLE = dest_width > 0,
+            p_DEST_WIDTH  = max(1, dest_width),
+            p_USER_ENABLE = user_width > 0,
+            p_USER_WIDTH  = max(1, user_width),
 
             # Clk / Rst.
             # ----------

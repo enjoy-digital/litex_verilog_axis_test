@@ -45,7 +45,7 @@ class AXISArbMux(Module):
         self.logger.info(f"ID Width: {colorer(id_width)}")
 
         # Dest width.
-        dest_width = s_axis[0].id_width
+        dest_width = s_axis[0].dest_width
         self.logger.info(f"Dest Width: {colorer(dest_width)}")
 
         # User width.
