@@ -82,25 +82,25 @@ class AXISMux(Module):
 
             # AXI Inputs.
             # -----------
-            o_s_axis_tdata  = Cat(*[axis.data  for axis in s_axis]),
-            o_s_axis_tkeep  = Cat(*[axis.keep  for axis in s_axis]),
-            o_s_axis_tvalid = Cat(*[axis.valid for axis in s_axis]),
-            i_s_axis_tready = Cat(*[axis.ready for axis in s_axis]),
-            o_s_axis_tlast  = Cat(*[axis.last  for axis in s_axis]),
-            o_s_axis_tid    = Cat(*[axis.id    for axis in s_axis]),
-            o_s_axis_tdest  = Cat(*[axis.dest  for axis in s_axis]),
-            o_s_axis_tuser  = Cat(*[axis.user  for axis in s_axis]),
+            i_s_axis_tdata  = Cat(*[axis.data  for axis in s_axis]),
+            i_s_axis_tkeep  = Cat(*[axis.keep  for axis in s_axis]),
+            i_s_axis_tvalid = Cat(*[axis.valid for axis in s_axis]),
+            o_s_axis_tready = Cat(*[axis.ready for axis in s_axis]),
+            i_s_axis_tlast  = Cat(*[axis.last  for axis in s_axis]),
+            i_s_axis_tid    = Cat(*[axis.id    for axis in s_axis]),
+            i_s_axis_tdest  = Cat(*[axis.dest  for axis in s_axis]),
+            i_s_axis_tuser  = Cat(*[axis.user  for axis in s_axis]),
 
             # AXI Output.
             # -----------
-            i_m_axis_tdata  = m_axis.data,
-            i_m_axis_tkeep  = m_axis.keep,
-            i_m_axis_tvalid = m_axis.valid,
-            o_m_axis_tready = m_axis.ready,
-            i_m_axis_tlast  = m_axis.last,
-            i_m_axis_tid    = m_axis.id,
-            i_m_axis_tdest  = m_axis.dest,
-            i_m_axis_tuser  = m_axis.user,
+            o_m_axis_tdata  = m_axis.data,
+            o_m_axis_tkeep  = m_axis.keep,
+            o_m_axis_tvalid = m_axis.valid,
+            i_m_axis_tready = m_axis.ready,
+            o_m_axis_tlast  = m_axis.last,
+            o_m_axis_tid    = m_axis.id,
+            o_m_axis_tdest  = m_axis.dest,
+            o_m_axis_tuser  = m_axis.user,
         )
 
         # Add Sources.
