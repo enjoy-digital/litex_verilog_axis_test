@@ -169,7 +169,15 @@ class AXISSimSoC(SoCCore):
             s_axis0 = AXIStreamInterface(data_width=32)
             s_axis1 = AXIStreamInterface(data_width=32)
             m_axis  = AXIStreamInterface(data_width=32)
-            self.submodules.axis_mux = AXISMux(platform, [m_axis0, m_axis1], m_axis)
+            self.submodules.axis_mux = AXISMux(platform, [s_axis0, s_axis1], m_axis)
+
+            # AXIS Demux.
+            # -----------
+            from verilog_axis.axis_demux import AXISDemux
+            s_axis  = AXIStreamInterface(data_width=32)
+            m_axis0 = AXIStreamInterface(data_width=32)
+            m_axis1 = AXIStreamInterface(data_width=32)
+            self.submodules.axis_mux = AXISDemux(platform, s_axis, [m_axis0, m_axis1])
 
         def axis_integration_test():
             # AXIS FIFO.
@@ -268,7 +276,7 @@ class AXISSimSoC(SoCCore):
             s_axis0 = AXIStreamInterface(data_width=32)
             s_axis1 = AXIStreamInterface(data_width=32)
             m_axis  = AXIStreamInterface(data_width=32)
-            self.submodules.axis_broadcast = AXISArbMux(platform, [m_axis0, m_axis1], m_axis)
+            self.submodules.axis_arb_mux = AXISArbMux(platform, [m_axis0, m_axis1], m_axis)
 
             axis_arb_mux_generator = AXISGenerator(s_axis0)
             axis_arb_mux_checker   = AXISChecker(m_axis)
@@ -280,11 +288,23 @@ class AXISSimSoC(SoCCore):
             s_axis0 = AXIStreamInterface(data_width=32)
             s_axis1 = AXIStreamInterface(data_width=32)
             m_axis  = AXIStreamInterface(data_width=32)
-            self.submodules.axis_broadcast = AXISArbMux(platform, [m_axis0, m_axis1], m_axis)
+            self.submodules.axis_mux = AXISMux(platform, [s_axis0, s_axis1], m_axis)
 
-            axis_arb_mux_generator = AXISGenerator(s_axis0)
-            axis_arb_mux_checker   = AXISChecker(m_axis)
-            self.submodules += axis_arb_mux_generator, axis_arb_mux_checker
+            axis_mux_generator = AXISGenerator(s_axis0)
+            axis_mux_checker   = AXISChecker(m_axis)
+            self.submodules += axis_mux_generator, axis_mux_checker
+
+            # AXIS Demux.
+            # -----------
+            from verilog_axis.axis_demux import AXISDemux
+            s_axis  = AXIStreamInterface(data_width=32)
+            m_axis0 = AXIStreamInterface(data_width=32)
+            m_axis1 = AXIStreamInterface(data_width=32)
+            self.submodules.axis_demux = AXISDemux(platform, s_axis, [m_axis0, m_axis1])
+
+            axis_demux_generator = AXISGenerator(s_axis)
+            axis_demux_checker   = AXISChecker(m_axis0)
+            self.submodules += axis_demux_generator, axis_demux_checker
 
             # Finish -------------------------------------------------------------------------------
             cycles = Signal(32)
@@ -322,6 +342,12 @@ class AXISSimSoC(SoCCore):
                Display("AXIS Arb Mux       Errors : %d / Cycles: %d",
                     axis_arb_mux_checker.errors,
                     axis_arb_mux_checker.cycles),
+               Display("AXIS Mux           Errors : %d / Cycles: %d",
+                    axis_mux_checker.errors,
+                    axis_mux_checker.cycles),
+               Display("AXIS Demux         Errors : %d / Cycles: %d",
+                    axis_demux_checker.errors,
+                    axis_demux_checker.cycles),
                 Finish(),
             )
 
