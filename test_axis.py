@@ -184,16 +184,25 @@ class AXISSimSoC(SoCCore):
             from verilog_axis.axis_crosspoint import AXISCrosspoint
             s_axis0 = AXIStreamInterface(data_width=32)
             s_axis1 = AXIStreamInterface(data_width=32)
-            s_axis2 = AXIStreamInterface(data_width=32)
-            s_axis3 = AXIStreamInterface(data_width=32)
             m_axis0 = AXIStreamInterface(data_width=32)
             m_axis1 = AXIStreamInterface(data_width=32)
-            m_axis2 = AXIStreamInterface(data_width=32)
-            m_axis3 = AXIStreamInterface(data_width=32)
- #           self.submodules.axis_crosspoint = AXISCrosspoint(platform,
- #               s_axis=[s_axis0, s_axis1, s_axis2, s_axis3],
- #               m_axis=[m_axis0, m_axis1, m_axis3, m_axis3]
- #           )
+            # FIXME: Verilator compil issue.
+            #self.submodules.axis_crosspoint = AXISCrosspoint(platform,
+            #    s_axis=[s_axis0, s_axis1],
+            #    m_axis=[m_axis0, m_axis1]
+            #)
+
+            # AXIS Switch.
+            # ------------
+            from verilog_axis.axis_switch import AXISSwitch
+            s_axis0 = AXIStreamInterface(data_width=32)
+            s_axis1 = AXIStreamInterface(data_width=32)
+            m_axis0 = AXIStreamInterface(data_width=32)
+            m_axis1 = AXIStreamInterface(data_width=32)
+            self.submodules.axis_switch = AXISSwitch(platform,
+                s_axis=[s_axis0, s_axis1],
+                m_axis=[m_axis0, m_axis1]
+            )
 
         def axis_integration_test():
             # AXIS FIFO.
@@ -322,6 +331,21 @@ class AXISSimSoC(SoCCore):
             axis_demux_checker   = AXISChecker(m_axis0)
             self.submodules += axis_demux_generator, axis_demux_checker
 
+            # AXIS Switch.
+            # ------------
+            from verilog_axis.axis_switch import AXISSwitch
+            s_axis0 = AXIStreamInterface(data_width=32)
+            s_axis1 = AXIStreamInterface(data_width=32)
+            m_axis0 = AXIStreamInterface(data_width=32)
+            m_axis1 = AXIStreamInterface(data_width=32)
+            self.submodules.axis_demux = AXISSwitch(platform,
+                s_axis=[s_axis0, s_axis1],
+                m_axis=[m_axis0, m_axis1]
+            )
+            axis_switch_generator = AXISGenerator(s_axis0)
+            axis_switch_checker   = AXISChecker(m_axis0)
+            self.submodules += axis_switch_generator, axis_switch_checker
+
             # Finish -------------------------------------------------------------------------------
             cycles = Signal(32)
             self.sync += cycles.eq(cycles + 1)
@@ -364,6 +388,9 @@ class AXISSimSoC(SoCCore):
                Display("AXIS Demux         Errors : %d / Cycles: %d",
                     axis_demux_checker.errors,
                     axis_demux_checker.cycles),
+               Display("AXIS Switch        Errors : %d / Cycles: %d",
+                    axis_switch_checker.errors,
+                    axis_switch_checker.cycles),
                 Finish(),
             )
 
