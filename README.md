@@ -24,7 +24,7 @@ This repository is an experiment to wrap Alex Forenchich's Verilog-AXI-Stream co
 | axis_mux                      | Done, passing simple tests                                       |
 | axis_pipeline_fifo            | Useless, will be composed with LiteX and axis_fifo               |
 | axis_pipeline_register        | Useless, will be composed with LiteX and axis_register           |
-| axis_ram_switch               | TODO                                                             |
+| axis_ram_switch               | Done, Verilator compil issue                                     |
 | axis_rate_limit               | Done, passing simple tests                                       |
 | axis_register                 | Done, passing simple tests                                       |
 | axis_srl_fifo                 | Done, passing simple tests                                       |
