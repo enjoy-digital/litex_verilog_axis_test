@@ -80,8 +80,8 @@ class AXISRateLimit(Module):
             i_clk = ClockSignal(clock_domain),
             i_rst = ResetSignal(clock_domain),
 
-            # Control.
-            # --------
+            # Controls.
+            # ---------
             i_rate_num      = self.rate_num,
             i_rate_denom    = self.rate_denom,
             i_rate_by_frame = self.rate_by_frame,

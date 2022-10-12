@@ -78,12 +78,14 @@ class AXISDemux(Module):
             i_clk = ClockSignal(clock_domain),
             i_rst = ResetSignal(clock_domain),
 
-            # Control.
+            # Controls.
+            # ---------
             i_enable = self.enable,
+            i_drop   = self.drop,
             i_select = self.select,
 
-            # AXI Inputs.
-            # -----------
+            # AXI Input.
+            # ----------
             i_s_axis_tdata  = s_axis.data,
             i_s_axis_tkeep  = s_axis.keep,
             i_s_axis_tvalid = s_axis.valid,

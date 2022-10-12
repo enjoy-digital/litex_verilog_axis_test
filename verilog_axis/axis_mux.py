@@ -76,7 +76,8 @@ class AXISMux(Module):
             i_clk = ClockSignal(clock_domain),
             i_rst = ResetSignal(clock_domain),
 
-            # Control.
+            # Controls.
+            # ---------
             i_enable = self.enable,
             i_select = self.select,
 
