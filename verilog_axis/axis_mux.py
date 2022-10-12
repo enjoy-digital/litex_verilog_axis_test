@@ -22,11 +22,6 @@ class AXISMux(Module):
     def __init__(self, platform, s_axis, m_axis):
         self.logger = logging.getLogger("AXISMux")
 
-        # Controls.
-        # ---------
-        self.enable = Signal(reset=1)
-        self.select = Signal(max=len(s_axis))
-
         # FIXME: Add Logs/Checks.
         # FIXME: Add Dynamic support?
 
@@ -55,6 +50,11 @@ class AXISMux(Module):
         # User width.
         user_width = s_axis[0].user_width
         self.logger.info(f"User Width: {colorer(user_width)}")
+
+        # Controls.
+        # ---------
+        self.enable = Signal(reset=1)
+        self.select = Signal(max=len(s_axis))
 
         # Module instance.
         # ----------------
