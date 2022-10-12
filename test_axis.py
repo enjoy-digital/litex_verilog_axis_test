@@ -179,6 +179,22 @@ class AXISSimSoC(SoCCore):
             m_axis1 = AXIStreamInterface(data_width=32)
             self.submodules.axis_mux = AXISDemux(platform, s_axis, [m_axis0, m_axis1])
 
+            # AXIS Crosspoint.
+            # ----------------
+            from verilog_axis.axis_crosspoint import AXISCrosspoint
+            s_axis0 = AXIStreamInterface(data_width=32)
+            s_axis1 = AXIStreamInterface(data_width=32)
+            s_axis2 = AXIStreamInterface(data_width=32)
+            s_axis3 = AXIStreamInterface(data_width=32)
+            m_axis0 = AXIStreamInterface(data_width=32)
+            m_axis1 = AXIStreamInterface(data_width=32)
+            m_axis2 = AXIStreamInterface(data_width=32)
+            m_axis3 = AXIStreamInterface(data_width=32)
+ #           self.submodules.axis_crosspoint = AXISCrosspoint(platform,
+ #               s_axis=[s_axis0, s_axis1, s_axis2, s_axis3],
+ #               m_axis=[m_axis0, m_axis1, m_axis3, m_axis3]
+ #           )
+
         def axis_integration_test():
             # AXIS FIFO.
             # ----------
