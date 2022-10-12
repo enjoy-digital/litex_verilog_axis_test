@@ -211,6 +211,19 @@ class AXISSimSoC(SoCCore):
                 m_axis=[m_axis0, m_axis1]
             )
 
+            # AXIS RAM Switch.
+            # ----------------
+            # FIXME: Verilator compil issue.
+            #from verilog_axis.axis_ram_switch import AXISRAMSwitch
+            #s_axis0 = AXIStreamInterface(data_width=32)
+            #s_axis1 = AXIStreamInterface(data_width=32)
+            #m_axis0 = AXIStreamInterface(data_width=32)
+            #m_axis1 = AXIStreamInterface(data_width=32)
+            #self.submodules.axis_ram_switch = AXISRAMSwitch(platform,
+            #    s_axis=[s_axis0, s_axis1],
+            #    m_axis=[m_axis0, m_axis1]
+            #)
+
         def axis_integration_test():
             # AXIS FIFO.
             # ----------
