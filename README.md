@@ -7,7 +7,7 @@ This repository is an experiment to wrap Alex Forenchich's Verilog-AXI-Stream co
 
 | Module                        | Status                                                           |
 |-------------------------------|------------------------------------------------------------------|
-| axis_adapter                  | TODO                                                             |
+| axis_adapter                  | Done, passing simple tests                                       |
 | axis_arb_mux                  | Done, passing simple tests                                       |
 | axis_async_fifo               | Done, passing simple tests                                       |
 | axis_async_fifo_adapter       | Useless, will be composed with LiteX and axis_fifo/adapter       |
