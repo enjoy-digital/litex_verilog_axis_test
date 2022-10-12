@@ -30,7 +30,7 @@ This repository is an experiment to wrap Alex Forenchich's Verilog-AXI-Stream co
 | axis_srl_fifo                 | Done, passing simple tests                                       |
 | axis_srl_register             | Done, passing simple tests                                       |
 | axis_stat_counter             | TODO                                                             |
-| axis_switch                   | TODO                                                             |
+| axis_switch                   | Done, passing simple tests                                       |
 | axis_tap                      | Done, need testing                                               |
 
 [> AXI-Stream <-> LocalLink Status
